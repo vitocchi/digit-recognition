@@ -3,8 +3,8 @@ import os
 import time
 from PIL import Image, ImageDraw
 
-IMAGE_SIZE = 100
-POINT_INTERVAL = 1000
+IMAGE_SIZE = 20
+POINT_INTERVAL = 10
 
 
 def chunks_to_image(list: list):
@@ -45,11 +45,11 @@ def endpoint(points: list):
     print('num of generated images = ' + str(max([len(standalized) - POINT_INTERVAL, 1])))
     num_of_point = len(standalized)
     for index in range(num_of_point):
-        im = Image.new('1', (IMAGE_SIZE, IMAGE_SIZE))
+        im = Image.new('1', (IMAGE_SIZE, IMAGE_SIZE), 1)
         draw = ImageDraw.Draw(im)
         image_points = standalized[index: index + POINT_INTERVAL]
-        draw.line(image_points, 1)
-        print(index)
+        draw.line(image_points, 0)
+        print('index:' + str(index))
         print(image_points)
         print(pytesseract.image_to_string(im, config='--psm 10 -c tessedit_char_whitelist=0123456789'))
         im.save(outputdir + '/' + str(index) + '.jpg')
@@ -81,13 +81,17 @@ print(pytesseract.image_to_string(FILENAME, config='--psm 10 -c tessedit_char_wh
 # endpoint([[0, 0], [1, 10], [2, 6], [3, 4], [4, 6], [5, 10], [1, 20], [5, 20]])
 
 
-def gen_points():
+def gen_line_points():
     points = []
     for i in range(100):
         points.append([i, i])
     return points
 
 
+def gen_seven_points():
+    return [[0, 0], [10, 10], [0, 0], [1, 1], [9, 1], [4, 9]]
+
+
 endpoint(
-    gen_points()
+    gen_seven_points()
 )

@@ -1,7 +1,12 @@
-FROM python:3.7.3-slim
+FROM python:3.6-slim
 
+    
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && echo 'deb https://notesalexp.org/tesseract-ocr/buster/ buster main' >> /etc/apt/sources.list \
+    && apt-get update -oAcquire::AllowInsecureRepositories=true \
+    && apt-get install -y notesalexp-keyring --allow-unauthenticated -oAcquire::AllowInsecureRepositories=true \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends --allow-unauthenticated \
     apt-utils \
     gcc \
     build-essential \

@@ -15,9 +15,11 @@ class NoDigitRecognizedError(Exception):
 # 画像のpixel数
 IMAGE_SIZE = 100
 # 画像を構成する点の数
-POINT_INTERVAL = 70
+POINT_INTERVAL = 15
 # 描画した画像を保存する
-SAVE_IMAGES = True
+SAVE_IMAGES = False
+# 削除する軌跡末尾の点の数
+SLICE_POINT_NUM = 5
 
 
 # standalize_points
@@ -115,14 +117,14 @@ def endpoint(locas_points: list) -> int:
     Labviewから座標点の軌跡をリストで受け取り、判定した数字を返す
     認識できた数字がなかった場合は-1を返す
     '''
-    if len(locas_points) == 0:
+    if len(locas_points) <= SLICE_POINT_NUM:
         raise Exception("there is no point")
-    return recognize_digit_from_locus_points(locas_points)
+    return recognize_digit_from_locus_points(locas_points[:-SLICE_POINT_NUM])
 
 
 if __name__ == '__main__':
     import csv
-    csv_file = open("csv/one.csv", "r", newline="")
+    csv_file = open("18_points/three.csv", "r", newline="")
     # リスト形式
     f = csv.reader(csv_file, delimiter=",", doublequote=True, lineterminator="\r\n", quotechar='"', skipinitialspace=True)
     points = []
